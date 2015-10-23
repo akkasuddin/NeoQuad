@@ -9,13 +9,9 @@
  *******************************************************************/
 
 #include "NeoQuad.h"
-#include <GL/glut.h>
-#include <cmath>
-#include <glm/vec3.hpp> // glm::vec3
-#include <glm/vec4.hpp> // glm::vec4
-#include <glm/mat4x4.hpp> // glm::mat4
-#include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 
+#include <GL/glut.h>
+#include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 #include <glm/gtc/type_ptr.hpp>
 #include <cstdio>
 using namespace std;
@@ -29,7 +25,7 @@ NeoQuad::NeoQuad()
     animate = true;
     currentState = NEUTRAL;
     timeline = new Timeline("NEO");
-    //timeline->displayLines();
+    
 }
 void NeoQuad::drawEllipsoid(unsigned int uiStacks, unsigned int uiSlices, float fA, float fB, float fC)
 {
@@ -80,7 +76,7 @@ void NeoQuad::drawPropellers(int rotorDirection)
         propScale -=0.015;
     }
     glScalef(propScale,propScale,propScale);
-    glColor4f(.75f, .75f, .75f, 0.25f);
+ //   glColor4f(.75f, .75f, .75f, 0.25f);
     gluCylinder(quadricObj, 0.25f, 0.25f, 3.0f, 10.0f, 10.0f);
     glTranslatef(0.0f, 0.0f, 3.0f);
     #ifndef SOLID_RENDERING
@@ -104,6 +100,27 @@ void NeoQuad::drawPropellers(int rotorDirection)
     
 }
 
+void NeoQuad::drawGun(float gunScale)
+{
+    glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+    //drawAxes();
+    glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+    gluDisk(quadricObj,0.0f,2.0f,10,3);
+    glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+    
+    gluCylinder(quadricObj, 2.0f, 2.0f, 15.0f, 10.0f, 10.0f);
+    glTranslatef(0.0f,0.0f,15.0f);
+    
+    glScalef(1.0f,1.0f,gunScale);
+    gluDisk(quadricObj,1.0f,2.0f,10,3);
+    gluCylinder(quadricObj, 1.0f, 1.0f, 10.0f, 10.0f, 10.0f);
+    glTranslatef(0.0f,0.0f,10.0f);
+    gluDisk(quadricObj,.5f,1.0f,10,3);
+    gluCylinder(quadricObj, .5f, .5f, 10.0f, 10.0f, 10.0f);
+    
+}
+
+
 void NeoQuad::drawGuns()
 {
     static float gunScale = 0;
@@ -124,43 +141,14 @@ void NeoQuad::drawGuns()
     
     //drawGuns
     glPushMatrix();
-    glColor3f(0.5,0.5,0.5);
     glTranslatef(-7.0f,0.0f,6.0f);
-    glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
-    //drawAxes();
-    glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
-    gluDisk(quadricObj,0.0f,2.0f,10,3);
-    glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
-    
-    gluCylinder(quadricObj, 2.0f, 2.0f, 15.0f, 10.0f, 10.0f);
-    glTranslatef(0.0f,0.0f,15.0f);
-    
-    glScalef(1.0f,1.0f,gunScale);
-    gluDisk(quadricObj,1.0f,2.0f,10,3);
-    gluCylinder(quadricObj, 1.0f, 1.0f, 10.0f, 10.0f, 10.0f);
-    glTranslatef(0.0f,0.0f,10.0f);
-    gluDisk(quadricObj,.5f,1.0f,10,3);
-    gluCylinder(quadricObj, .5f, .5f, 10.0f, 10.0f, 10.0f);
+    drawGun(gunScale);
     glPopMatrix();
     
-    //drawAxes();
-    glColor3f(0.5,0.5,0.5);
+    glPushMatrix();
     glTranslatef(-7.0f,0.0f,-6.0f);
-    glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
-    
-    glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
-    gluDisk(quadricObj,0.0f,2.0f,10,3);
-    glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
-    
-    gluCylinder(quadricObj, 2.0f, 2.0f, 15.0f, 10.0f, 10.0f);
-    glTranslatef(0.0f,0.0f,15.0f);
-    
-    glScalef(1.0f,1.0f,gunScale);
-    gluDisk(quadricObj,1.0f,2.0f,10,3);
-    gluCylinder(quadricObj, 1.0f, 1.0f, 10.0f, 10.0f, 10.0f);
-    glTranslatef(0.0f,0.0f,10.0f);
-    gluDisk(quadricObj,.5f,1.0f,10,3);
-    gluCylinder(quadricObj, .5f, .5f, 10.0f, 10.0f, 10.0f);
+    drawGun(gunScale);
+    glPopMatrix();
 }
 
 
@@ -174,7 +162,7 @@ void NeoQuad::drawQuad()
     //Draw Axes
     //drawAxes();
     
-    glColor4f(.75f, .75f, .75f, 0.25f);
+    glColor4f(.75f, .75f, .75f, .95f);
     
     //draw body
     drawEllipsoid(20, 20, 15, 5, 5);

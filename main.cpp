@@ -108,20 +108,16 @@ void TimerFunc(int value) {
 void initializeRendering()
 {
     glEnable(GL_TEXTURE_2D);                    // Enable texture mapping.
-    
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);          // Set the blending function for translucency (note off at init time)
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+   // glBlendFunc(GL_SRC_ALPHA, GL_ONE);          // Set the blending function for translucency (note off at init time)
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);       // This Will Clear The Background Color To Black
     glClearDepth(1.0);                          // Enables Clearing Of The Depth Buffer
     glDepthFunc(GL_LESS);                       // type of depth test to do.
-    // glEnable(GL_DEPTH_TEST);                    // enables depth testing.
+    glEnable(GL_DEPTH_TEST);                    // enables depth testing.
     glShadeModel(GL_SMOOTH);                    // Enables Smooth Color Shading
     
     glEnable(GL_LIGHTING); //Enable lighting
-    //   glMatrixMode(GL_PROJECTION);
-    //  glLoadIdentity();                           // Reset The Projection Matrix
-    
-    //   gluPerspective(45.0f,(GLfloat)Width/(GLfloat)Height,0.1f,100.0f);   // Calculate The Aspect Ratio Of The Window
-    
     glMatrixMode(GL_MODELVIEW);
     
     /*****************************************For Background***********************/ 
@@ -162,6 +158,10 @@ void initializeRendering()
     glEnable(GL_NORMALIZE); //Automatically normalize normals
     glEnable(GL_CULL_FACE);
     
+    
+    glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
+    glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
+    
 }
 
 
@@ -184,10 +184,10 @@ void keypressHandler(unsigned char key, int x, int y)
         case 'w':
             neoQuad->rollQuad(-2);
             break;
-        case 'f':
+        case 'q':
             neoQuad->pitchQuad(2);
             break;
-        case 'g':
+        case 'e':
             neoQuad->pitchQuad(-2);
             break;
         case ';':
@@ -214,7 +214,7 @@ void keypressHandler(unsigned char key, int x, int y)
 void drawHandler()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.0f, 0.25f, 0.0f, 1.0f);
     glClearDepth(1.0);                          // Enables Clearing Of The Depth Buffer
     glPushMatrix();
     // glMatrixMode(GL_MODELVIEW);
@@ -226,25 +226,23 @@ void drawHandler()
     
     glm::mat4 mvp = projection* view * model;       //Compute the mvp matrix
     glLoadMatrixf(glm::value_ptr(mvp));
-    glColor3f(1.0f,1.0f,1.0f);
+  //  glColor4f(1.0f,1.0f,1.0f,1.0f);
     //*
     neoQuad->draw();
     
     glPopMatrix();
     
     
-    
-    
-    
-    //glDisable(GL_CULL_FACE);
+    //should always be at the end
+    //reset projection matrix
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0.0f, window.size.x, 0.0f,window.size.y, 0.0f, 100000.0f);
+    
+    //reset Modelview matrix 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glColor3f(0.0f,0.0f,0.0f);
-    glutSolidTeapot(1);
-    
+    //draw all buttons
     Button::drawButtons();
 
     
@@ -278,13 +276,11 @@ int main(int argc, char** argv)
     glutInitWindowSize(1024, 512);
     glutInitWindowPosition(0, 0);
     window.window_handle = glutCreateWindow("Age of Quadrones"); //create window
-    int btnid;
+
     powerButton = new Button(100,110,200,90,"PowerUP",powerButtonCallback);
     speedUpButton = new Button(50,90,150,70,"SpeedUP",speedUpCallback);
     speedDownButton = new Button(150,90,250,70,"SpeedDN",speedDownCallback);
-    int xxx = Button::buttons.size();
-  //  int ids = Button::btnID;
-    //*
+
     glutReshapeFunc(ReshapeFunc);
     glutDisplayFunc(drawHandler);
     glutKeyboardFunc(keypressHandler);
@@ -302,7 +298,7 @@ int main(int argc, char** argv)
     camera.SetClipping(.1, 80000);
     camera.SetFOV(45);
     //Start the glut loop!
-    //*/
+
     glutMainLoop();
     return 0;
     

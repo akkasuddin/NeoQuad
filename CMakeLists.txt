@@ -9,7 +9,7 @@ add_subdirectory(glm/)
 include_directories(glm/)
 
 #copy all files form Data/ to build/Data
-#file(COPY Data/ DESTINATION Data/)
+file(COPY Data/ DESTINATION Data/)
 #install(TARGETS NeoQuad RUNTIME DESTINATION bin)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)

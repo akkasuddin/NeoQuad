@@ -26,8 +26,7 @@ bool Button::bounds(int x, int y)
 {
     if((left<x && x<right) && (bottom<y && y<top))
         return true;
-    else 
-        return false;
+    return false;
 
 }
 
@@ -38,15 +37,10 @@ bool Button::bounds(int x, int y)
 void Button::draw()
 {
     glDisable(GL_LIGHTING);
-    //glMatrixMode( GL_PROJECTION );
     glPushMatrix();
-    //glOrtho(left,top,right, bottom,);
     glTranslatef(0,0,-.1);
     
-
-    
     glLineWidth(2);
-    //glTranslatef(0, 0, 0);
     if(state == GLUT_UP)
         glColor3f(.85f,.85f,.85f);
     else
@@ -56,7 +50,6 @@ void Button::draw()
         glVertex2f(right-1,top-1);
         glVertex2f(left+1,top-1);
         glVertex2f(left+1,bottom+1);
-        //glVertex2f(right,bottom);
     glEnd();
     
     if(state == GLUT_UP)
@@ -65,7 +58,6 @@ void Button::draw()
         glColor3f(.85f,.85f,.85f);
     
     glBegin(GL_LINE_STRIP);
-    //glVertex2f(right,top);
         glVertex2f(left+1,bottom+1);
         glVertex2f(right-1,bottom+1);
         glVertex2f(right-1,top-1);
@@ -82,18 +74,15 @@ void Button::draw()
     
     glLineWidth(1);
     
-    glColor3f(0.0f,0.0f,0.0f);
-    glTranslatef(left+3, bottom+3, .1);
-    //glTranslatef(left,top,0);
-    float scale =  (top-bottom-6)/100.0; 
+    glColor3f(1.0f,1.0f,1.0f);
+    glTranslatef(left+5, bottom+5, .1);
+    float scale =  (top-bottom-10)/100.0; 
     glScalef( scale,scale,scale);
     for( char* p = label; *p; p++)
     {
         glutStrokeCharacter(GLUT_STROKE_ROMAN, *p);
     }
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    
+    glPopMatrix();  
     glEnable(GL_LIGHTING);
 }
 
@@ -101,7 +90,6 @@ void Button::draw()
 
 Button* Button::checkClick(int buttonState, int x, int y)
 {
-    int xx = buttons.size();
     for(vector<Button*>::iterator it = buttons.begin(); it!=buttons.end();it++)
     {
         if((*it)->bounds(x,y))

@@ -1,8 +1,5 @@
 #include "Timeline.h"
 
-
-
-
 Timeline::Timeline(char* tag)
 {
   
@@ -32,9 +29,7 @@ Timeline::Timeline(char* tag)
                 }
         if(strstr(templine,tag)!=NULL && templine[0]!='#')
          {
-             sprintf(commands[numCommands++],"%lf %s",time,templine+4);
-             
-            
+             sprintf(commands[numCommands++],"%lf %s",time,templine+4);        
          }
     }
     fclose(fin);
@@ -46,7 +41,6 @@ char* Timeline::readNextCommand()
     if(currentCommand==numCommands)
         return " ";
     return commands[currentCommand++];
-    
 
 }
 
