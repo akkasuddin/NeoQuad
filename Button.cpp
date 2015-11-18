@@ -7,10 +7,11 @@
 
 vector<Button*> Button::buttons;
 
-Button::Button(int left, int top, int right, int bottom,char*label, void(* mouseClickCallback)(void))
+Button::Button(int left, int top, int right, int bottom,char*label/*string label*/, void(* mouseClickCallback)(void))
 {
     
     strcpy(this->label,label);
+    //this->label = label;
     this->left = left;
     this->top = top;
     this->right = right;
@@ -78,7 +79,7 @@ void Button::draw()
     glTranslatef(left+5, bottom+5, .1);
     float scale =  (top-bottom-10)/100.0; 
     glScalef( scale,scale,scale);
-    for( char* p = label; *p; p++)
+    for( char* p =label; *p; p++)
     {
         glutStrokeCharacter(GLUT_STROKE_ROMAN, *p);
     }

@@ -16,11 +16,11 @@
 using namespace std;
 
 #define sqrt2 1.41421356237
+enum State{NEUTRAL=1,POWERINGUP,POWEREDUP,POWERINGDOWN};
 
 class NeoQuad:public Quadrotor
 {
 private:
-    enum State{NEUTRAL=1,POWERINGUP,POWEREDUP,POWERINGDOWN};
     QuadTimer propTime;
 
     float propAngle;
@@ -35,13 +35,16 @@ private:
     void drawGuns();
     void rotateProps();
     
+    unsigned char * data;
 public:
-  
+    GLuint EarthMap;
+    GLuint propTex;
     NeoQuad();
     void toggleAnimate();
     void drawQuad();
     void changePropSpeed(float increment);
     void powerToggle();
+    void LoadGLTextures();
     
 };
 

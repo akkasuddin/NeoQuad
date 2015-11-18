@@ -16,12 +16,26 @@
 
 #include "NeoQuad.h"
 #include "Button.h"
+//#include <pthread.h>
+//#include "SOIL.h"
 
 using namespace std;
 using namespace glm;
 
 //Create the Camera
 Camera camera;
+
+/*
+void *simplefunc(void*)
+{
+    return NULL;
+    
+}
+void forcePThreadLink(){
+    pthread_t t1;
+    pthread_create(&t1,NULL,&simplefunc,NULL);
+}
+*/
 
 class Window {
 public:
@@ -119,7 +133,7 @@ void initializeRendering()
     
     glEnable(GL_LIGHTING); //Enable lighting
     glMatrixMode(GL_MODELVIEW);
-    
+    glEnable(GL_MULTISAMPLE);  
     /*****************************************For Background***********************/ 
     
     GLfloat ambientColor[] = {0.2f, 0.2f, 0.2f, 1.0f}; //Color (0.2, 0.2, 0.2)
@@ -159,8 +173,8 @@ void initializeRendering()
     glEnable(GL_CULL_FACE);
     
     
-    glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
-    glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
+   // glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
+  //  glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
     
 }
 
@@ -211,6 +225,7 @@ void keypressHandler(unsigned char key, int x, int y)
     //glutPostRedisplay();
 }
 
+GLuint textures[1];  
 void drawHandler()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -228,6 +243,8 @@ void drawHandler()
     glLoadMatrixf(glm::value_ptr(mvp));
   //  glColor4f(1.0f,1.0f,1.0f,1.0f);
     //*
+    
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
     neoQuad->draw();
     
     glPopMatrix();
@@ -268,13 +285,20 @@ void speedDownCallback()
     neoQuad->changePropSpeed(-0.1);
 }
 
+
+
+
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv); //initialize glut 
-    glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA); //initialize display mode
+    glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA| GLUT_MULTISAMPLE); //initialize display mode
     
-    glutInitWindowSize(1024, 512);
+    glutInitWindowSize(1280, 720);
     glutInitWindowPosition(0, 0);
+
+    //loadGLTextures();
+    //glEnable(GL_TEXTURE_2D); 
+    //xx = xx+1;
     window.window_handle = glutCreateWindow("Age of Quadrones"); //create window
 
     powerButton = new Button(100,110,200,90,"PowerUP",powerButtonCallback);
@@ -291,7 +315,7 @@ int main(int argc, char** argv)
     neoQuad = new NeoQuad();
     neoQuad->moveAbs(10,60,0);
     initializeRendering();//Setup camera
-    
+    //loadGLTextures();
     camera.SetMode(FREE);
     camera.SetPosition(glm::vec3(0, 60, 100));
     camera.SetLookAt(glm::vec3(0, 60, 0));
@@ -304,4 +328,5 @@ int main(int argc, char** argv)
     
     
 }
+
 

@@ -13,7 +13,7 @@
 #ifndef _BUTTON_H_
 #define _BUTTON_H_
 #include<vector>
-
+//#include<string>
 using namespace std;
 
 class Button
@@ -22,6 +22,7 @@ private:
     int left,top,right,bottom;
     int state;
     char label[120];
+    //string label;
     //checks if boundary conditions are met 
     inline bool bounds(int x, int y);
     //draws the button
@@ -32,7 +33,7 @@ private:
  
 public:
     //Constructor
-    Button(int left,int top,int right,int bottom,char *label, void(* mouseClickCallback)(void));
+    Button(int left,int top,int right,int bottom,char *label /*string label*/, void(* mouseClickCallback)(void));
     
     static vector<Button*> buttons;
     static Button* checkClick(int buttonState,int x,int y);
